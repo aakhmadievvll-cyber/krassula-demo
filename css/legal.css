@@ -1,0 +1,76 @@
+/* Privacy policy page: plain, readable document on the site's paper */
+
+.legal-page {
+  --scene-accent: var(--ribbon);
+  background: var(--paper);
+}
+
+.legal-top,
+.legal {
+  max-width: calc(44rem + var(--gutter) * 2);
+  margin: 0 auto;
+  padding-inline: var(--gutter);
+}
+
+.legal-top {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 0.5rem 1rem;
+  padding-top: 1.5rem;
+}
+
+.legal {
+  padding-top: 3.5rem;
+  padding-bottom: 6rem;
+  overflow-wrap: break-word;
+}
+
+.legal__date {
+  margin-top: 1rem;
+  color: var(--ink-soft);
+  font-size: var(--text-sm);
+}
+
+.legal section {
+  margin-top: 2.5rem;
+}
+
+.legal h2 {
+  font-family: var(--font-display);
+  font-size: var(--text-h3);
+  font-weight: 500;
+  line-height: 1.2;
+}
+
+.legal p,
+.legal ul {
+  max-width: 40rem;
+  margin-top: 0.75rem;
+  color: var(--ink-soft);
+}
+
+.legal ul {
+  padding-left: 1.25rem;
+  list-style: disc;
+}
+
+.legal li + li {
+  margin-top: 0.25rem;
+}
+
+/* Unfilled template fields are impossible to miss */
+.todo {
+  padding: 0 0.2em;
+  border-radius: 2px;
+  background: #ffe28a;
+  color: var(--ink);
+}
+
+.legal code {
+  padding: 0.05em 0.3em;
+  border-radius: var(--radius-s);
+  background: var(--paper-deep);
+  font-size: 0.9em;
+}

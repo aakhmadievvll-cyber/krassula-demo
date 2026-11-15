@@ -1,0 +1,126 @@
+/* Cookie question: a small paper note pinned to the corner, readable over the night scene and the day pages */
+
+.cookie {
+  --scene-accent: var(--ribbon);
+  position: fixed;
+  z-index: 90;
+  left: max(1rem, env(safe-area-inset-left));
+  bottom: max(1rem, env(safe-area-inset-bottom));
+  width: min(25.5rem, calc(100vw - 2rem));
+  padding: 0.9rem 1.25rem 1.2rem;
+  border-radius: var(--radius-m);
+  background: var(--sheet);
+  color: var(--ink);
+  font-size: var(--text-sm);
+  line-height: 1.55;
+  box-shadow:
+    0 0 0 1px rgb(34 38 32 / 0.08),
+    0 22px 48px -18px rgb(10 16 13 / 0.55);
+  animation: cookie-in var(--duration-slow) var(--ease-out) both;
+}
+
+.cookie[hidden] {
+  display: none;
+}
+
+.cookie__note {
+  margin-bottom: 0.35rem;
+  color: var(--ribbon);
+  font-family: var(--font-hand);
+  font-size: 1.35rem;
+  line-height: 1.2;
+  transform: rotate(-2deg);
+  transform-origin: left center;
+}
+
+.cookie__text {
+  color: var(--ink-soft);
+}
+
+.cookie__state {
+  margin-top: 0.6rem;
+  font-weight: 500;
+}
+
+.cookie__state[hidden] {
+  display: none;
+}
+
+.cookie__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.cookie__button {
+  flex: 1 1 8rem;
+  min-height: 2.75rem;
+  padding: 0.6rem 1rem;
+}
+
+.button--quiet {
+  background: transparent;
+  color: var(--ink);
+  box-shadow: inset 0 0 0 1px rgb(34 38 32 / 0.32);
+}
+
+.button--quiet:hover {
+  background: var(--paper-deep);
+}
+
+/* Footer and policy buttons that reopen the question; shown by JS only when the counter is set */
+.link-button {
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-decoration: underline;
+  text-decoration-thickness: 1px;
+  text-underline-offset: 0.22em;
+  cursor: pointer;
+}
+
+.link-button[hidden] {
+  display: none;
+}
+
+@keyframes cookie-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+}
+
+/* Phones: the headline sits low on the screen, so the question moves up under the header and gets shorter */
+@media (max-width: 599px) {
+  .cookie {
+    top: calc(var(--header-h) + 0.5rem);
+    bottom: auto;
+    padding: 0.8rem 1rem 0.9rem;
+    font-size: var(--text-xs);
+    line-height: 1.45;
+    animation-name: cookie-in-top;
+  }
+
+  .cookie__note {
+    display: none;
+  }
+
+  .cookie__actions {
+    margin-top: 0.75rem;
+  }
+
+  .cookie__button {
+    min-height: 2.5rem;
+    padding: 0.45rem 0.8rem;
+  }
+}
+
+@keyframes cookie-in-top {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+}

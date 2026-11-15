@@ -1,0 +1,59 @@
+:root {
+  /* Story edges — sampled from the generated scenes so the film melts into the page */
+  --night: #0a100d;
+  --morning: #f5e8da;
+
+  /* Page after the story: one warm paper family, one ink, one accent (the real ribbon) */
+  --paper: #f3efe8;
+  --paper-deep: #e9e3d8;
+  --sheet: #fbf9f5;
+  --ink: #222620;
+  --ink-soft: #5a5e55;
+  --line: rgb(34 38 32 / 0.16);
+  --snow: #f2ede4;
+  --snow-soft: rgb(242 237 228 / 0.78);
+  --ribbon: #a24e3c;
+  --ribbon-light: #e2a28d;
+  --leaf: #4b7140;
+  --danger: #ad3626;
+
+  /* Scene colors, driven by the story director */
+  --scene: var(--night);
+  --scene-fg: var(--snow);
+  --scene-fg-soft: var(--snow-soft);
+  --scene-accent: var(--ribbon-light);
+
+  /* Type: a book serif for headings, a Russian grotesque for text, a hand for notes */
+  --font-display: 'Literata', Georgia, 'Times New Roman', serif;
+  --font-body: 'Onest', 'Helvetica Neue', Arial, sans-serif;
+  --font-hand: 'Bad Script', 'Segoe Print', cursive;
+
+  /* Scale ≈ 1.25 from 17px */
+  --text-xs: 0.8125rem;
+  --text-sm: 0.875rem;
+  --text-base: 1.0625rem;
+  --text-lead: clamp(1.0625rem, 1rem + 0.3vw, 1.1875rem);
+  --text-h3: clamp(1.375rem, 1.2rem + 0.6vw, 1.6875rem);
+  --text-h2: clamp(2rem, 1.35rem + 2.1vw, 3.25rem);
+  --text-hero: clamp(2.5rem, 1.6rem + 3vw, 4.25rem);
+  --text-note: clamp(1.5rem, 1.2rem + 0.9vw, 2.125rem);
+
+  --gutter: clamp(1.25rem, 0.6rem + 2.6vw, 3rem);
+  --header-h: 3.5rem;
+  --measure: 34rem;
+
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.45, 0, 0.2, 1);
+  --duration-fast: 160ms;
+  --duration-normal: 280ms;
+  --duration-slow: 560ms;
+
+  --radius-s: 3px;
+  --radius-m: 6px;
+}
+
+[data-tone='day'] {
+  --scene-fg: var(--ink);
+  --scene-fg-soft: rgb(34 38 32 / 0.76);
+  --scene-accent: var(--ribbon);
+}

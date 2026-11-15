@@ -1,0 +1,394 @@
+/* ---------- The scroll story: one pinned stage, the film inside a soft round window ---------- */
+
+.story {
+  position: relative;
+  height: calc(var(--story-len, 1630) * 1vh + 100svh);
+  background: var(--scene);
+}
+
+.story__stage {
+  --film: min(100svh, 62vw);
+  position: sticky;
+  top: 0;
+  height: 100svh;
+  overflow: hidden;
+  isolation: isolate;
+  background: var(--scene);
+  color: var(--scene-fg);
+}
+
+/* Keeps the copy readable where its column overlaps the film */
+.story__stage::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  background: linear-gradient(
+    90deg,
+    var(--scene) 0%,
+    color-mix(in srgb, var(--scene) 72%, transparent) 30%,
+    transparent 52%
+  );
+  pointer-events: none;
+}
+
+.film {
+  position: absolute;
+  top: 50%;
+  right: max(0px, calc((100vw - var(--film)) * 0.04));
+  z-index: 1;
+  width: var(--film);
+  aspect-ratio: 1;
+  translate: 0 -50%;
+}
+
+/*
+ * The soft round window: the film's edges dissolve into the stage colour. An overlay looks the same
+ * as a mask here (the stage behind is that colour) but costs nothing to composite while the layers
+ * underneath move; a mask over moving layers made phones redraw the whole film every frame.
+ */
+.film::after {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: radial-gradient(
+    closest-side,
+    transparent 64%,
+    color-mix(in srgb, var(--scene) 40%, transparent) 82%,
+    var(--scene) 100%
+  );
+  pointer-events: none;
+}
+
+.film__layer {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  will-change: transform, opacity;
+}
+
+.film__layer[data-layer='seq'] {
+  transform-origin: 50% 57.6%;
+}
+
+.film__layer[data-layer='night'],
+.film__layer[data-layer='salute'],
+.film__layer[data-layer='morning'] {
+  transform-origin: 27.3% 77%;
+  opacity: 0;
+}
+
+/* Numbered marks on the revealed pot */
+.hotspots {
+  position: absolute;
+  inset: 0;
+}
+
+.hotspot {
+  position: absolute;
+  display: grid;
+  place-items: center;
+  width: 1.75rem;
+  height: 1.75rem;
+  margin: -0.875rem 0 0 -0.875rem;
+  border-radius: 50%;
+  background: var(--sheet);
+  color: var(--ink);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  box-shadow: 0 0 0 4px rgb(251 249 245 / 0.35), 0 4px 10px -4px rgb(60 40 20 / 0.5);
+  opacity: 0;
+  transform: scale(0.6);
+}
+
+.hotspot--plant { left: 46%; top: 30%; }
+.hotspot--pot { left: 50%; top: 70%; }
+.hotspot--dome { left: 82%; top: 44%; }
+
+/* ---------- Copy beats ---------- */
+
+.beats {
+  position: absolute;
+  inset: 0;
+  z-index: 3;
+  pointer-events: none;
+}
+
+.beat {
+  position: absolute;
+  top: 50%;
+  left: var(--gutter);
+  /* The left fifth of every frame is faded darkness, so copy may run a little into it */
+  width: min(36rem, calc(100vw - var(--film) * 0.82 - var(--gutter) * 2));
+  translate: 0 -50%;
+  opacity: 0;
+  will-change: transform, opacity;
+}
+
+/* The opening and closing lines get a little more room: the film's left edge is dark there */
+.beat--hero,
+.beat--outro {
+  width: min(40rem, calc(100vw - var(--film) * 0.7 - var(--gutter) * 2));
+}
+
+.beat .note {
+  margin-bottom: 0.6rem;
+}
+
+.beat__step {
+  margin-bottom: 0.9rem;
+  color: var(--scene-fg-soft);
+  font-size: var(--text-sm);
+  font-variant-numeric: tabular-nums;
+}
+
+.beat__title {
+  font-family: var(--font-display);
+  font-size: var(--text-h2);
+  font-weight: 500;
+  line-height: 1.06;
+  letter-spacing: -0.018em;
+  text-wrap: balance;
+}
+
+.beat--hero .beat__title {
+  font-size: var(--text-hero);
+  line-height: 1.02;
+  letter-spacing: -0.022em;
+}
+
+.beat__text {
+  max-width: 28rem;
+  margin-top: 1.1rem;
+  color: var(--scene-fg-soft);
+  font-size: var(--text-lead);
+  line-height: 1.55;
+  text-wrap: pretty;
+}
+
+/* Legend for the marks on the pot */
+.legend {
+  display: grid;
+  gap: 0.5rem;
+  margin-top: 1.25rem;
+  counter-reset: legend;
+}
+
+.legend li {
+  display: flex;
+  align-items: baseline;
+  gap: 0.7rem;
+  color: var(--scene-fg-soft);
+  counter-increment: legend;
+}
+
+.legend li::before {
+  content: counter(legend);
+  flex: none;
+  display: grid;
+  place-items: center;
+  width: 1.4rem;
+  height: 1.4rem;
+  border: 1px solid currentColor;
+  border-radius: 50%;
+  font-size: var(--text-xs);
+  font-weight: 600;
+}
+
+/* Growth calendar */
+.months {
+  display: flex;
+  gap: 1.1rem;
+  margin-top: 1.25rem;
+  font-size: var(--text-sm);
+}
+
+.months li {
+  color: var(--scene-fg-soft);
+  opacity: 0.4;
+  transition: opacity var(--duration-normal);
+}
+
+.months li[data-on='true'] {
+  opacity: 1;
+}
+
+.months li[data-on='true']:has(+ li[data-on='false']),
+.months li[data-on='true']:last-child {
+  color: var(--scene-fg);
+  text-decoration: underline;
+  text-decoration-color: var(--leaf);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 0.35em;
+}
+
+/* Scroll cue */
+.scroll-cue {
+  position: absolute;
+  bottom: max(1.5rem, env(safe-area-inset-bottom));
+  left: 50%;
+  z-index: 3;
+  display: grid;
+  justify-items: center;
+  gap: 0.6rem;
+  color: var(--scene-fg-soft);
+  font-size: var(--text-sm);
+  translate: -50% 0;
+}
+
+.scroll-cue::after {
+  content: '';
+  width: 1px;
+  height: 2.5rem;
+  background: linear-gradient(to bottom, var(--scene-fg-soft), transparent);
+  transform-origin: top;
+  animation: cue-line 2.2s var(--ease-soft) infinite;
+}
+
+@keyframes cue-line {
+  0% { transform: scaleY(0); opacity: 1; }
+  60% { transform: scaleY(1); opacity: 1; }
+  100% { transform: scaleY(1); opacity: 0; }
+}
+
+.skip-story {
+  position: absolute;
+  right: var(--gutter);
+  bottom: max(1.25rem, env(safe-area-inset-bottom));
+  z-index: 5;
+  color: var(--scene-fg-soft);
+  font-size: var(--text-sm);
+  transition:
+    opacity var(--duration-normal),
+    visibility 0s,
+    color var(--duration-fast);
+}
+
+.skip-story:hover {
+  color: var(--scene-fg);
+}
+
+/* ---------- Portrait & narrow screens: film on top, copy at the bottom ---------- */
+
+@media (max-width: 899px), (max-aspect-ratio: 5/4) {
+  .story__stage {
+    --film: min(118vw, 60svh);
+  }
+
+  .film {
+    top: calc(var(--header-h) - 0.5rem);
+    right: auto;
+    left: 50%;
+    translate: -50% 0;
+  }
+
+  .story__stage::before {
+    background: linear-gradient(
+      to top,
+      var(--scene) 0%,
+      var(--scene) 24%,
+      color-mix(in srgb, var(--scene) 70%, transparent) 36%,
+      transparent 48%
+    );
+  }
+
+  .beat {
+    top: auto;
+    right: var(--gutter);
+    bottom: max(3.5rem, calc(env(safe-area-inset-bottom) + 3rem));
+    width: auto;
+    max-width: 36rem;
+    translate: none;
+  }
+
+  .beat__title {
+    font-size: clamp(1.875rem, 1.2rem + 4vw, 3rem);
+  }
+
+  .beat--hero .beat__title {
+    font-size: clamp(2.375rem, 1.4rem + 5.4vw, 4rem);
+  }
+
+  .beat__text {
+    margin-top: 0.8rem;
+    font-size: 1rem;
+  }
+
+
+  .scroll-cue {
+    display: none;
+  }
+
+  .skip-story {
+    left: var(--gutter);
+    right: auto;
+    bottom: max(1rem, env(safe-area-inset-bottom));
+    font-size: var(--text-xs);
+  }
+}
+
+@media (max-width: 899px) and (max-height: 700px) {
+  .story__stage {
+    --film: min(100vw, 52svh);
+  }
+
+  .beat__text {
+    display: none;
+  }
+
+  .beat--hero .beat__text {
+    display: block;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .scroll-cue::after {
+    animation: none;
+  }
+}
+
+/* ---------- Static fallback (director failed to start); noscript.css mirrors it ---------- */
+
+.story.is-static {
+  height: auto;
+}
+
+.story.is-static .story__stage {
+  position: relative;
+  height: auto;
+  overflow: visible;
+  padding: calc(var(--header-h) + 2rem) var(--gutter) 4rem;
+}
+
+.story.is-static .story__stage::before,
+.story.is-static .film__layer:not([data-layer='poster']),
+.story.is-static .hotspots,
+.story.is-static .scroll-cue,
+.story.is-static .skip-story {
+  display: none;
+}
+
+.story.is-static .film {
+  --film: min(90vw, 70svh);
+  position: relative;
+  inset: auto;
+  translate: none;
+  margin: 0 auto 2.5rem;
+}
+
+.story.is-static .beats {
+  position: static;
+  display: grid;
+  gap: 3.5rem;
+  max-width: 40rem;
+  margin: 0 auto;
+}
+
+.story.is-static .beat {
+  position: static;
+  width: auto;
+  translate: none;
+  opacity: 1;
+}

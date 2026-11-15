@@ -1,0 +1,13 @@
+/* Loaded only without JavaScript: the story becomes a plain, readable page. Mirrors .story.is-static */
+.story { height: auto; }
+.story .story__stage { position: relative; height: auto; overflow: visible; padding: calc(var(--header-h) + 2rem) var(--gutter) 4rem; }
+.story .story__stage::before,
+.story .film__layer:not([data-layer='poster']),
+.story .hotspots,
+.story .scroll-cue,
+.story .skip-story,
+.chapter-label { display: none; }
+.story .film { --film: min(90vw, 70svh); position: relative; inset: auto; translate: none; margin: 0 auto 2.5rem; }
+.story .beats { position: static; display: grid; gap: 3.5rem; max-width: 40rem; margin: 0 auto; }
+.story .beat { position: static; width: auto; translate: none; opacity: 1; }
+[data-lead-form]::after { content: 'Чтобы отправить заявку, включите JavaScript.'; font-size: 0.875rem; }
